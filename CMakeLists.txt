@@ -130,24 +130,11 @@ if (TEST_COVERAGE)
 	set (CMAKE_CXX_FLAGS_DEBUG "${COMPILER_FLAGS} -O0 -g -fprofile-arcs -ftest-coverage -fPIC -DIS_DEBUG")
 endif (TEST_COVERAGE)
 
-# Run tests with "make check"
 if (ENABLE_TESTS)
 	message (STATUS "Tests are enabled")
-	if (TARGET check)
-		message (STATUS "Target check already exists")
-	else ()
-		include (cmake/add_check.cmake)
-	endif ()
-endif (ENABLE_TESTS)
-
-# Installation prefix
-if (NOT CMAKE_SYSTEM MATCHES "FreeBSD")
-	set (CMAKE_INSTALL_PREFIX /usr)
-	set (CLICKHOUSE_ETC_DIR /etc)
-else ()
-	set (CLICKHOUSE_ETC_DIR ${CMAKE_INSTALL_PREFIX}/etc)
+	enable_testing()
+	add_subdirectory (dbms/tests)
 endif ()
-
 
 option (UNBUNDLED "Try find all libraries in system (if fail - use bundled from contrib/)" OFF)
 if (UNBUNDLED)
